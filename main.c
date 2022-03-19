@@ -3,7 +3,7 @@
 void printMemoryD(int * startptr, int * ptr, int * endptr){
     int i;
     for (i = 0; startptr + i != endptr; i++){
-        if (startptr + i == ptr) printf("P:");
+        if (startptr + i == ptr) printf("P-");
         else printf("  ");
         printf("M%d: %d\n", i, startptr[i]);
     }
@@ -27,10 +27,10 @@ void applyCommand(char * command, int ** ptr, int ** endptr){
     }
 }
 
-int cmpr(char * a, char * b){
+int cmprCommand(char * command, const char * c){
     int i;
-    for (i = 0; a[i] != '\0' && b[i] != '\0'; i++)
-        if (a[i] != b[i]) return 0;
+    for (i = 0; command[i] != '\0' && c[i] != '\0'; i++)
+        if (command[i] != c[i]) return 0;
     return 1;
 }
 
@@ -42,13 +42,10 @@ int main(){
         printf("->: ");
         scanf("%s", command);
 
-        if      (cmpr(command, "print")) printMemoryD(startptr, ptr, endptr);
-        else if (cmpr(command, "stop"))  break;
+        if      (cmprCommand(command, "print")) printMemoryD(startptr, ptr, endptr);
+        else if (cmprCommand(command, "stop"))  break;
         else applyCommand(command, &ptr, &endptr);
     }
     
-
-    
-
     return 0;
 }
