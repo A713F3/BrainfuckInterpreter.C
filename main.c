@@ -104,7 +104,7 @@ int main(){
     char *ptr = &memory[0], *startptr = ptr, *endptr = ptr + 1;
     char command[MAX_COMMAND];
 
-    printf("8r41NFUCK 1N73rPr373r [Version 1.0]\n(type 'help' for a list of commands)\n");
+    printf("8r41NFUCK 1N73rPr373r [Version 1.0]\n(type 'help' for a list of commands)\n\n");
     while(1){
         printf("->: ");
         scanf("%s", command);
