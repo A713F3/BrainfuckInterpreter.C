@@ -3,9 +3,14 @@
 #define MEMORY_SIZE 1000
 #define MAX_COMMAND 200
 
+// Hello World!
+// ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.
 
-void clearMemory(char * memory){
+
+void clearMemory(char * memory, char ** ptr, char ** endptr){
     int i;
+    *ptr = &memory[0];
+    *endptr = *ptr + 1;
     for (i = 0; i < MEMORY_SIZE; i++){
         memory[i] = 0;
     }
@@ -22,7 +27,7 @@ void printMemoryD(char * startptr, char * ptr, char * endptr){
 }
 
 void applyCommand(char * command, char * startptr, char ** ptr, char ** endptr){
-    int i, output_flag = 0;
+    int i, output_flag = 0, loop_counter = 0;
     char output[MAX_COMMAND], counter = 0;
     char c;
 
@@ -40,6 +45,7 @@ void applyCommand(char * command, char * startptr, char ** ptr, char ** endptr){
         if (c == '+') (**ptr)++;
         if (c == '-') (**ptr)--;
 
+        //TODO add input
         // Output and input
         if (c == '.') {
             output_flag = 1;
@@ -49,18 +55,27 @@ void applyCommand(char * command, char * startptr, char ** ptr, char ** endptr){
 
         //TODO fix loops for nested structures
         // Loop
+        loop_counter = 0;
         if (c == '[') {
             if (**ptr == 0) {
-                while (command[i] != ']' && command[i] != '\0'){
+                while (command[i] != '\0'){
                     i++;
+
+                    if (command[i] == ']' && loop_counter == 0) break;
+                    if (command[i] == ']' && loop_counter != 0) loop_counter--;
+                    if (command[i] == '[') loop_counter++;
                 }
             }
                 
         }
         if (c == ']'){
             if (**ptr != 0) {
-                while (command[i] != '[' && command[i] != '\0'){
+                while (command[i] != '\0' && i != 0){
                     i--;
+                    
+                    if (command[i] == '[' && loop_counter == 0) break;
+                    if (command[i] == '[' && loop_counter != 0) loop_counter--;
+                    if (command[i] == ']') loop_counter++;
                 }
             }
         }
@@ -81,14 +96,15 @@ int main(){
     char *ptr = &memory[0], *startptr = ptr, *endptr = ptr + 1;
     char command[MAX_COMMAND];
 
-    printf("8r41NFUCK 1N73rPr373r [Version 1.0]\n");
+    printf("8r41NFUCK 1N73rPr373r [Version 1.0]\ntype help for a list of commands\n");
     while(1){
         printf("->: ");
         scanf("%s", command);
 
-        if      (cmprCommand(command, "print")) printMemoryD(startptr, ptr, endptr);
+        if      (cmprCommand(command, "help")) printf("print: mrint Memory\nclear: Clear memory\nstop: Stop program\n");
+        else if (cmprCommand(command, "print")) printMemoryD(startptr, ptr, endptr);
         else if (cmprCommand(command, "stop"))  break;
-        else if (cmprCommand(command, "clear")) clearMemory(memory);
+        else if (cmprCommand(command, "clear")) clearMemory(memory, &ptr, &endptr);
         else applyCommand(command, startptr, &ptr, &endptr);
     }
     
