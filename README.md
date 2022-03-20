@@ -1,2 +1,2 @@
 # Simple Brainfuck Interpreter 🧠🍆
-🔄 Work in progress :arrows_counterclockwise:
+A simple brainfuck interpreter that works in console.
