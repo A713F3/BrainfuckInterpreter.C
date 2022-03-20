@@ -27,7 +27,7 @@ void printMemoryD(char * startptr, char * ptr, char * endptr){
 }
 
 void applyCommand(char * command, char * startptr, char ** ptr, char ** endptr){
-    int i, output_flag = 0, loop_counter = 0;
+    int i, output_flag = 0, loop_counter = 0, input_flag = 1;
     char output[MAX_COMMAND], counter = 0;
     char c;
 
@@ -45,15 +45,22 @@ void applyCommand(char * command, char * startptr, char ** ptr, char ** endptr){
         if (c == '+') (**ptr)++;
         if (c == '-') (**ptr)--;
 
-        //TODO add input
         // Output and input
         if (c == '.') {
             output_flag = 1;
             output[counter] = **ptr;
             counter++;
         }
+        if (c == ','){
+            if (input_flag) {
+                printf("Input: ");
+                input_flag = 0;
+            }
 
-        //TODO fix loops for nested structures
+            getchar();
+            **ptr = getchar();
+        }
+
         // Loop
         loop_counter = 0;
         if (c == '[') {
@@ -72,7 +79,7 @@ void applyCommand(char * command, char * startptr, char ** ptr, char ** endptr){
             if (**ptr != 0) {
                 while (command[i] != '\0' && i != 0){
                     i--;
-                    
+
                     if (command[i] == '[' && loop_counter == 0) break;
                     if (command[i] == '[' && loop_counter != 0) loop_counter--;
                     if (command[i] == ']') loop_counter++;
